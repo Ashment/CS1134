@@ -1,5 +1,5 @@
 
-def FibGen (n) :
+def fibs (n) :
 	fibList = [1];
 	yield 1;
 

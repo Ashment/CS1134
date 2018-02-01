@@ -74,6 +74,9 @@ class Vector :
 		if(isinstance(other, int)) :
 			return Vector([i*other for i in self.coords])
 
+	def __len__(self) :
+		return len(self.coords);
+
 
 
 #Testing

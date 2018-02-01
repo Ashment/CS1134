@@ -1,6 +1,6 @@
-def Shift (inList, shiftRange, dir='left') :
+def shift (inList, k, dir='left') :
 	if dir=='left' :
-		for rec in range(shiftRange) :
+		for rec in range(k) :
 			temp = inList[0];
 #			print ("Temp : " + str(temp));
 
@@ -11,7 +11,7 @@ def Shift (inList, shiftRange, dir='left') :
 			inList[len(inList)-1] = temp;
 
 	else :
-		for rec in range(shiftRange) :
+		for rec in range(k) :
 			temp = inList[len(inList)-1];
 #			print ("Temp : " + str(temp));
 
