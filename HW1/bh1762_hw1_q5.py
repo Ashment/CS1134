@@ -11,6 +11,3 @@ def FibGen (n) :
 			fibList.append(fibList[i] + fibList[i-1])
 			yield fibList[i+1];
 
-
-for i in FibGen(10) :
-	print(i);

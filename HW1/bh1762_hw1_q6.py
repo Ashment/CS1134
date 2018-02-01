@@ -77,19 +77,19 @@ class Vector :
 
 
 #Testing
-vd = Vector([1,2]);
-v1 = Vector([1,2,3]);
-print(str(v1));
-v2 = Vector([4,5,6]);
-vs = v1-v2;
-print(vs);
-vn = -vs
-print(vn)
+#vd = Vector([1,2]);
+#v1 = Vector([1,2,3]);
+#print(str(v1));
+#v2 = Vector([4,5,6]);
+#vs = v1-v2;
+#print(vs);
+#vn = -vs
+#print(vn)
 
-vm = 3*v1;
-print(vm);
-vm = v1*3;
-print(vm);
-vm = v1 * v2;
-print(vm);
+#vm = 3*v1;
+#print(vm);
+#vm = v1*3;
+#print(vm);
+#vm = v1 * v2;
+#print(vm);
 

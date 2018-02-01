@@ -21,11 +21,12 @@ def Shift (inList, shiftRange, dir='left') :
 
 			inList[0] = temp;
 
-lstT = [1,2,3,4,5];
-print(lstT);
-Shift(lstT,2);
-print();
-print(lstT);
-Shift(lstT,2,'right');
-print();
-print(lstT);
+
+#lstT = [1,2,3,4,5];
+#print(lstT);
+#Shift(lstT,2);
+#print();
+#print(lstT);
+#Shift(lstT,2,'right');
+#print();
+#print(lstT);
