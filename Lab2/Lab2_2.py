@@ -111,30 +111,37 @@ timer.reset();
 result, start, end = maxSubsequenceSum1(p7);
 print(timer.elapsed());
 
+#
+#f = open('./Sum1.csv', 'w');
+#f.write('n, time\n')
+#for p in pList :
+#	timer.reset()
+#	result, start, end = maxSubsequenceSum1(p);
+#	f.write(str(len(p)) + ',' + str(timer.elapsed()) + '\n');
+#	print('\n' + 'DONE |> Sum1 : ' + str(len(p)) + '\n');
+#f.close();
 
-f = open('./Sum1.csv', 'w');
-f.write('n, time\n')
-for p in pList :
-	timer.reset()
-	result, start, end = maxSubsequenceSum1(p);
-	f.write(str(len(p)) + ',' + str(timer.elapsed()) + '\n');
-	print('\n' + 'DONE |> Sum1 : ' + str(len(p)) + '\n');
-f.close();
 
-
-f = open('./Sum2.csv', 'w');
-f.write('n, time\n')
-for p in pList :
-	timer.reset()
-	result, start, end = maxSubsequenceSum2(p);
-	f.write(str(len(p)) + ',' + str(timer.elapsed()) + '\n');
-	print('\n' + 'DONE |> Sum2 : ' + str(len(p)) + '\n');
-f.close();
+#f = open('./Sum2.csv', 'w');
+#f.write('n, time\n')
+#for p in pList :
+#	timer.reset()
+#	result, start, end = maxSubsequenceSum2(p);
+#	f.write(str(len(p)) + ',' + str(timer.elapsed()) + '\n');
+#	print('\n' + 'DONE |> Sum2 : ' + str(len(p)) + '\n');
+#f.close();
 
 
 f = open('./Sum3.csv', 'w');
 f.write('n, time\n')
 for p in pList :
+	p7 = FillWithRandInt(128);
+	p8 = FillWithRandInt(256);
+	p9 = FillWithRandInt(512);
+	p10 = FillWithRandInt(1024);
+	p11 = FillWithRandInt(2048);
+	p12 = FillWithRandInt(4096);
+	pList = [p7,p8,p9,p10,p11,p12];
 	timer.reset()
 	result, start, end = maxSubsequenceSum3(p);
 	f.write(str(len(p)) + ',' + str(timer.elapsed()) + '\n');
