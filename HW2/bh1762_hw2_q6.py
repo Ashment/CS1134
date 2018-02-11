@@ -6,7 +6,7 @@ def two_sum(srt_lst, target) :
 
 	while lowerind != upperind :
 		if(srt_lst[lowerind] + srt_lst[upperind] == target) :
-			return [lowerind, upperind];
+			return (lowerind, upperind);
 		elif (srt_lst[lowerind] + srt_lst[upperind] < target) :
 			lowerind += 1;
 		else :
