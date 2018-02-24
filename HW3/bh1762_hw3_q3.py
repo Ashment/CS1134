@@ -1,5 +1,5 @@
 
-def FindDuplicates (inLst) :
+def find_duplicates (inLst) :
 	counterLst = [0 for i in range(len(inLst))];		#(n)
 	# 	INDEX		 0  1  2  3  4  5      n-2
 	#	LIST		[0, 0, 0, 0, 0, 0, ... ,0]
@@ -20,5 +20,8 @@ def FindDuplicates (inLst) :
 #	n + n + n
 #	O(3n) > O(n)
 
+
+'''
 listT = [2,4,4,1,2];
 print(FindDuplicates(listT));
+'''
