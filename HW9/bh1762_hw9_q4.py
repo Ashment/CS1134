@@ -1,6 +1,6 @@
 import random
 
-class MapNode:
+class Node:
     def __init__(self, data=None, prev=None, next=None):
         self.data = data
         self.prev = prev
@@ -11,14 +11,13 @@ class MapNode:
         self.prev = None
         self.next = None
 
-    def unlink(self):
+    def unlinkSelf(self):
         succ = self.next;
         pred = self.prev;
         pred.next = succ;
         succ.prev = pred;
-        self.data = None;
-        self.prev = None;
-        self.next = None;
+        self.disconnect();
+
 
 class ChainingHashTableMap:
 
@@ -29,9 +28,10 @@ class ChainingHashTableMap:
         self.p = p
         self.a = random.randrange(1, self.p - 1)
         self.b = random.randrange(0, self.p - 1)
-        self.keyHeader = MapNode();
-        self.keyTrailer = MapNode();
-        self.curNodeCursor = self.keyHeader;
+
+        self.keyHeader = Node();
+        self.keyTrailer = Node();
+        self.curCursor = self.keyHeader;
 
     def hash_function(self, k):
         return ((self.a * hash(k) + self.b) % self.p) % self.N
@@ -41,46 +41,53 @@ class ChainingHashTableMap:
 
     def __getitem__(self, key):
         i = self.hash_function(key)
-        curr_bucket = self.table[i].data
+        curr_bucket = self.table[i]
         if curr_bucket is None:
             raise KeyError("Key Error: " + str(key))
         return curr_bucket[key]
 
     def __setitem__(self, key, value):
+        keyNode = Node();
+        keyNode.data = key;
+        keyNode.prev = self.curCursor;
+        self.curCursor.next = keyNode;
+        keyNode.next = self.keyTrailer;
+        self.curCursor = self.curCursor.next;
+        pVal = (keyNode, value);
+
         i = self.hash_function(key)
         if self.table[i] is None:
-            newNode = MapNode();
-            newNode.data = UnsortedArrayMap()
-            self.table[i] = newNode;
-            self.curNodeCursor.next = newNode;
-            newNode.next = self.keyTrailer;
-            self.curNodeCursor = newNode;
-        old_size = len(self.table[i].data)
-        self.table[i].data[key] = value
-        new_size = len(self.table[i].data)
+            self.table[i] = UnsortedArrayMap()
+        old_size = len(self.table[i])
+        self.table[i][key] = pVal;
+        new_size = len(self.table[i])
         if (new_size > old_size):
             self.n += 1
         if (self.n > self.N):
             self.rehash(2 * self.N)
 
     def __delitem__(self, key):
+        delNode = self[key][1];
+        delNode.unlinkSelf();
+
         i = self.hash_function(key)
-        curr_bucket = self.table[i].data
+        curr_bucket = self.table[i]
         if curr_bucket is None:
             raise KeyError("Key Error: " + str(key))
         del curr_bucket[key]
         self.n -= 1
         if (curr_bucket.is_empty()):
-            self.table[i].unlink();
             self.table[i] = None
         if (self.n < self.N // 4):
             self.rehash(self.N // 2)
 
     def __iter__(self):
-        for eNode in self.table:
-            if(eNode is not None):
-                for key in eNode.data:
-                    yield key;
+        iCursor = self.keyHeader.next;
+        while iCursor is not self.keyTrailer:
+            cData = iCursor.data;
+            iCursor = iCursor.next;
+            yield cData;
+
 
     def rehash(self, new_size):
         old = []
@@ -94,12 +101,13 @@ class ChainingHashTableMap:
             self[key] = value
 
 
+
 class UnsortedArrayMap:
 
     class Item:
-        def __init__(self, key, value=None):
+        def __init__(self, key, keyNode, value=None):
             self.key = key
-            self.value = value
+            self.value = [value, keyNode];
 
 
     def __init__(self):
@@ -114,15 +122,15 @@ class UnsortedArrayMap:
     def __getitem__(self, key):
         for item in self.table:
             if key == item.key:
-                return item.value
+                return item.value[0];
         raise KeyError("Key Error: " + str(key))
 
     def __setitem__(self, key, value):
         for item in self.table:
             if key == item.key:
-                item.value = value
+                item.value[0] = value
                 return
-        self.table.append(UnsortedArrayMap.Item(key, value))
+        self.table.append(UnsortedArrayMap.Item(key, value[1], value[0]))
 
     def __delitem__(self, key):
         for j in range(len(self.table)):
@@ -134,5 +142,4 @@ class UnsortedArrayMap:
     def __iter__(self):
         for item in self.table:
             yield item.key
-
 

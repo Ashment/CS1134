@@ -1,24 +1,50 @@
 import random
 
-class MapNode:
-    def __init__(self, data=None, prev=None, next=None):
-        self.data = data
-        self.prev = prev
-        self.next = next
 
-    def disconnect(self):
-        self.data = None
-        self.prev = None
-        self.next = None
+class InvertedFile:
+	def __init__(self, fileName):
+		self.dataTable = ChainingHashTableMap();
+		f = open(fileName, "r");
+		fContent = f.readlines();
+		f.close();
 
-    def unlink(self):
-        succ = self.next;
-        pred = self.prev;
-        pred.next = succ;
-        succ.prev = pred;
-        self.data = None;
-        self.prev = None;
-        self.next = None;
+		wordArr = self.GetWords(fContent);
+
+		curInd = 0;
+		while curInd < len(wordArr):
+			curWord = wordArr[curInd];
+			try:
+				self.dataTable[curWord].append(curInd);
+			except:
+				self.dataTable[curWord] = [];
+				self.dataTable[curWord].append(curInd);
+			curInd += 1;
+		print("Inverted File Table Generation Complete.")
+
+	def indices(self, targetWord):
+		try:
+			out = self.dataTable[targetWord];
+			return out
+		except:
+			pass
+		return [];
+
+
+	def GetWords(self, linesArr):
+		wordsArr = [];
+		for line in linesArr:
+			words = line.split();
+			for w in words:
+				if(len(w) > 0):
+					while (not w[-1].isalpha()):
+						w = w[0:len(w)-1];
+					wordsArr.append(w.lower());
+		return wordsArr
+
+
+###############################################################
+###          R E S O U R C E       C L A S S E S            ###
+###############################################################
 
 class ChainingHashTableMap:
 
@@ -29,9 +55,6 @@ class ChainingHashTableMap:
         self.p = p
         self.a = random.randrange(1, self.p - 1)
         self.b = random.randrange(0, self.p - 1)
-        self.keyHeader = MapNode();
-        self.keyTrailer = MapNode();
-        self.curNodeCursor = self.keyHeader;
 
     def hash_function(self, k):
         return ((self.a * hash(k) + self.b) % self.p) % self.N
@@ -41,7 +64,7 @@ class ChainingHashTableMap:
 
     def __getitem__(self, key):
         i = self.hash_function(key)
-        curr_bucket = self.table[i].data
+        curr_bucket = self.table[i]
         if curr_bucket is None:
             raise KeyError("Key Error: " + str(key))
         return curr_bucket[key]
@@ -49,15 +72,10 @@ class ChainingHashTableMap:
     def __setitem__(self, key, value):
         i = self.hash_function(key)
         if self.table[i] is None:
-            newNode = MapNode();
-            newNode.data = UnsortedArrayMap()
-            self.table[i] = newNode;
-            self.curNodeCursor.next = newNode;
-            newNode.next = self.keyTrailer;
-            self.curNodeCursor = newNode;
-        old_size = len(self.table[i].data)
-        self.table[i].data[key] = value
-        new_size = len(self.table[i].data)
+            self.table[i] = UnsortedArrayMap()
+        old_size = len(self.table[i])
+        self.table[i][key] = value
+        new_size = len(self.table[i])
         if (new_size > old_size):
             self.n += 1
         if (self.n > self.N):
@@ -65,22 +83,21 @@ class ChainingHashTableMap:
 
     def __delitem__(self, key):
         i = self.hash_function(key)
-        curr_bucket = self.table[i].data
+        curr_bucket = self.table[i]
         if curr_bucket is None:
             raise KeyError("Key Error: " + str(key))
         del curr_bucket[key]
         self.n -= 1
         if (curr_bucket.is_empty()):
-            self.table[i].unlink();
             self.table[i] = None
         if (self.n < self.N // 4):
             self.rehash(self.N // 2)
 
     def __iter__(self):
-        for eNode in self.table:
-            if(eNode is not None):
-                for key in eNode.data:
-                    yield key;
+        for curr_bucket in self.table:
+            if (curr_bucket is not None):
+                for key in curr_bucket:
+                    yield key
 
     def rehash(self, new_size):
         old = []
@@ -134,5 +151,14 @@ class UnsortedArrayMap:
     def __iter__(self):
         for item in self.table:
             yield item.key
+
+
+def DEBUG():
+	a = InvertedFile("test.txt");
+	print(a.indices("row"));
+
+
+
+
 
 
